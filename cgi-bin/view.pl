@@ -26,3 +26,52 @@ while (@row = $sth->fetchrow_array){
 $sth->finish;
 $dbh->disconnect;
 
+sub matchLine{
+  my $linea = $_[0];
+
+  #El primer if para descartar las lineas en blanco
+  if (!($linea =~ /^\s*$/ )){
+
+    while ($linea =~ /(.*)(\_)(.*)(\_)(.*)/){
+      $linea = "$1<em>$3</em>$5";
+    }
+
+    while ($linea =~ /(.*)(\[)(.*)(\])(\()(.*)(\))(.*)/) {
+      $linea = "$1<a href='$6'>$3</a>$8";
+    }
+
+    while ($linea =~ /(.*)(\*\*\*)(.*)(\*\*\*)(.*)/) {
+      $linea = "$1<strong><em>$3</em></strong>$5";
+    }
+
+    while ($linea =~ /(.*)(\*\*)(.*)(\*\*)(.*)/) {
+      $linea = "$1<strong>$3</strong>$5";
+    }
+
+    while ($linea =~ /(.*)(\*)(.*)(\*)(.*)/) {
+      $linea = "$1<em>$3</em>$5";
+    }
+
+    while ($linea =~ /(.*)(\~\~)(.*)(\~\~)(.*)/){
+      $linea = "$1<del>$3</del>$5";
+    }
+
+    if ($linea =~ /^(\#)([^#\S].*)/) {
+      return $linea = "<h1>$2</h1>\n";
+    }
+
+    elsif ($linea =~ /^(\#\#)([^#\S].*)/) {
+      return $linea = "<h2>$2</h2>\n";
+    }
+
+    elsif ($linea =~ /^(\#\#\#)([^#\S].*)/) {
+      return $linea = "<h3>$2</h3>\n";
+    }
+
+    elsif ($linea =~ /^(\#\#\#\#)([^#\S].*)/) {
+      return $linea = "<h4>$2</h4>\n";
+    }
+
+    elsif ($linea =~ /^(\#\#\#\#\#)([^#\S].*)/) {
+      return $linea = "<h5>$2</h5>\n";
+    }

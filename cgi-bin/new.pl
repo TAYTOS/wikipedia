@@ -38,3 +38,21 @@ else{
 }
 $dbh->disconnect;
 
+sub renderHTMLpage{
+  my $title = $_[0];
+  my $body = $_[1];
+  my $html = <<"HTML";
+  <!DOCTYPE html>
+  <html lang="es">
+    <head>
+      <title>$title</title>
+      <meta charset="UTF-8">
+    </head>
+    <body>
+      $body
+    </body>
+  </html>
+HTML
+  return $html;
+}
+
