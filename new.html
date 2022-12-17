@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>Nueva página</title>
+    <meta charset="UTF-8">
+  </head>
+
+  <body>
+    <form action="cgi-bin/new.pl">
+      <label for="titulo">Título</label>
+      <input type="text" id="cuadro_titulo" name="titulo" required>
+      <br>
+      <label for="texto">Texto</label>
+      <textarea id="cuadro_texto" name="texto" required></textarea>
+      <br>
+      <input type="submit" id="boton_submit" value="Enviar">
+    </form>
+    <br>
+    <a href="cgi-bin/list.pl">Cancelar</a>  
+  </body>
+</html>

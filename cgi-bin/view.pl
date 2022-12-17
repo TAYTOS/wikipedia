@@ -25,6 +25,39 @@ while (@row = $sth->fetchrow_array){
 
 $sth->finish;
 $dbh->disconnect;
+my $body = renderBody(@text);
+
+sub renderBody{
+
+  my @lines = @_;
+  my $texto = "";
+  #convierto el string en array para usar la funcion matchLine
+  my @lineas = split "\n", $lines[0];
+  my $num_lineas = @lineas;
+  
+  for (my $i=0; $i<$num_lineas; $i++){
+    my $linea_convertida = "";
+    if ($lineas[$i] =~ /^(```)/){
+      $i++;
+      my $code = "<pre><code>\n";
+      my $code2 = "</code></pre><br>\n";
+      my $textcode = "";
+      for ($i; !($lineas[$i] =~ /^(```)/) && $i<$num_lineas; $i++){
+        $textcode.="   $lineas[$i]\n";
+      }
+      $texto.="$code$textcode$code2";
+    }
+    else {  
+      $linea_convertida = matchLine($lineas[$i]); }
+    $texto.="$linea_convertida";
+  }
+
+  my $body = <<"BODY";
+   $texto
+BODY
+  return $body;
+}
+
 
 sub matchLine{
   my $linea = $_[0];
