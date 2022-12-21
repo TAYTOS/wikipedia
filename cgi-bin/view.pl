@@ -26,7 +26,29 @@ while (@row = $sth->fetchrow_array){
 $sth->finish;
 $dbh->disconnect;
 my $body = renderBody(@text);
+print renderHTMLpage('View',$titulo,&body);
 
+sub renderHTMLpage{
+  my $title = $_[0];
+  my $titulo = $_[1];
+  my $body = $_[2];
+  my $link_delete = "<a href='delete.pl?fn=$titulo' id='linkboton'>X</a>";
+  my $link_edit = "<a href='edit.pl?fn=$titulo' id='linkboton'>E</a>";
+  my $html = <<"HTML";
+    <!DOCTYPE html>
+     <html lang="es">
+     <head>
+     <title>$title</title>
+     <meta charset="UTF-8">
+     </head>
+       <body>
+        <h2><a href="list.pl">Retroceder</a> - $link_delete $link_edit</h2>
+         $body
+       </body>
+    </html>
+HTML
+  return $html;
+}
 sub renderBody{
 
   my @lines = @_;
@@ -107,4 +129,27 @@ sub matchLine{
 
     elsif ($linea =~ /^(\#\#\#\#\#)([^#\S].*)/) {
       return $linea = "<h5>$2</h5>\n";
+    
     }
+
+sub renderHTMLpage{
+  my $title = $_[0];
+  my $titulo = $_[1];
+  my $body = $_[2];
+  my $link_delete = "<a href='delete.pl?fn=$titulo' id='linkboton'>X</a>";
+  my $link_edit = "<a href='edit.pl?fn=$titulo' id='linkboton'>E</a>";
+  my $html = <<"HTML";
+    <!DOCTYPE html>
+     <html lang="es">
+     <head>
+     <title>$title</title>
+     <meta charset="UTF-8">
+     </head>
+       <body>
+        <h2><a href="list.pl">Retroceder</a> - $link_delete $link_edit</h2>
+         $body
+       </body>
+    </html>
+HTML
+  return $html;
+}

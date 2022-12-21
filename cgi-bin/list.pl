@@ -22,8 +22,38 @@ while (@row = $sth->fetchrow_array){
 
 $sth->finish;
 $dbh->disconnect;
+my $HTMLtitulos = renderSelect(@titles);
 my $body = renderBody($HTMLtitulos);
 print renderHTMLpage('List',$body);
+
+sub renderSelect{
+  my @lines = @_;
+  my $titulos = "";
+  foreach my $titulo (@lines){
+    if (defined($titulo)){
+      my $link_delete = "<a href='delete.pl?fn=$titulo' id='linkboton'>X</a>";
+      my $link_edit = "<a href='edit.pl?fn=$titulo' id='linkboton'>E</a>";
+      $titulos.= "     <li><a href='view.pl?fn=$titulo'>$titulo</a> $link_delete $link_edit</li>\n";
+    }
+  }
+  return $titulos;
+}
+
+sub renderBody{
+  my $HTMLtitulos = $_[0];
+  my $body = <<"BODY";
+    <h1>Nuestras páginas de wikipedia</h1>
+    <ul>
+    $HTMLtitulos
+    </ul>
+    <hr>
+    <a href="../new.html">Nueva página</a>
+    <br>
+    <a href="../index.html">Volver al inicio</a>
+BODY
+  return $body;
+}
+
 
 sub renderHTMLpage{
   my $title = $_[0];
