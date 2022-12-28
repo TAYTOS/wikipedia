@@ -11,7 +11,7 @@ print $q->header('text/html;charset=UTF-8');
 
 my $user = 'alumno';
 my $password = 'pweb1';
-my $dsn = "DBI:MariaDB:database=pweb1;host=192.168.0.22";
+my $dsn = "DBI:MariaDB:database=pweb1;host=192.168.0.41";
 my $dbh = DBI->connect($dsn, $user, $password) or die("No se pudo conectar!");;
 
 my $sth = $dbh->prepare("SELECT cuerpo FROM wikipedia WHERE titulo=?");
@@ -25,30 +25,10 @@ while (@row = $sth->fetchrow_array){
 
 $sth->finish;
 $dbh->disconnect;
-my $body = renderBody(@text);
-print renderHTMLpage('View',$titulo,&body);
 
-sub renderHTMLpage{
-  my $title = $_[0];
-  my $titulo = $_[1];
-  my $body = $_[2];
-  my $link_delete = "<a href='delete.pl?fn=$titulo' id='linkboton'>X</a>";
-  my $link_edit = "<a href='edit.pl?fn=$titulo' id='linkboton'>E</a>";
-  my $html = <<"HTML";
-    <!DOCTYPE html>
-     <html lang="es">
-     <head>
-     <title>$title</title>
-     <meta charset="UTF-8">
-     </head>
-       <body>
-        <h2><a href="list.pl">Retroceder</a> - $link_delete $link_edit</h2>
-         $body
-       </body>
-    </html>
-HTML
-  return $html;
-}
+my $body = renderBody(@text);
+print renderHTMLpage('View',$titulo,$body);
+
 sub renderBody{
 
   my @lines = @_;
@@ -79,7 +59,6 @@ sub renderBody{
 BODY
   return $body;
 }
-
 
 sub matchLine{
   my $linea = $_[0];
@@ -129,8 +108,17 @@ sub matchLine{
 
     elsif ($linea =~ /^(\#\#\#\#\#)([^#\S].*)/) {
       return $linea = "<h5>$2</h5>\n";
-    
     }
+
+    elsif ($linea =~ /^(\#\#\#\#\#\#)([^\S].*)/) {
+      return $linea = "<h6>$2</h6>\n";
+    }
+
+    else {
+      return $linea = "<p>$linea</p>\n";
+    }
+  }
+}
 
 sub renderHTMLpage{
   my $title = $_[0];
